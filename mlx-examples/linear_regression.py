@@ -42,20 +42,26 @@ def main(device, eval):
         loss, grad = grad_fn(w)
         w = w - lr * grad
         # this evaluation drastically degenerates the performance even though the final results are identical
-        if eval: mx.eval(w)
+        if eval:
+            mx.eval(w)
     toc = time.perf_counter()
 
     _tic = time.perf_counter()
     loss = loss_fn(w)
     error_norm = mx.sum(mx.square(w - w_star)).item() ** 0.5
     throughput = num_iters / (toc - tic)
-    
-    print(f"Loss {loss.item():.5f}, |w-w*| = {error_norm:.5f}, " f"Throughput {throughput:.5f} (it/s)")
+
+    print(
+        f"Loss {loss.item():.5f}, |w-w*| = {error_norm:.5f}, "
+        f"Throughput {throughput:.5f} (it/s)"
+    )
     _toc = time.perf_counter()
     # print(f"{toc-tic:.5f}s / {_toc-_tic:.5f}s")
 
+
 if __name__ == "__main__":
     import argparse
+
     p = argparse.ArgumentParser()
     p.add_argument("--device", choices=("cpu", "gpu"), default="cpu")
     p.add_argument("--eval", action="store_true")

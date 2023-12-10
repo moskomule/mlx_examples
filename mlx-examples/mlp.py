@@ -4,17 +4,16 @@
 import argparse
 import time
 
-
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
-
 import mnist
 
 
-def permutation(size: int, key: mx.array=None) -> mx.array:
+def permutation(size: int, key: mx.array = None) -> mx.array:
     noise = mx.random.uniform(shape=(size,), key=key)
     return mx.argsort(noise)
+
 
 class MLP(nn.Module):
     """A simple MLP."""
@@ -46,7 +45,6 @@ def batch_iterate(batch_size, X, y, key):
 
 
 def main():
-    
     num_layers = 2
     hidden_dim = 32
     num_classes = 10
@@ -66,6 +64,7 @@ def main():
     loss_and_grad_fn = nn.value_and_grad(model, loss_fn)
     optimizer = optim.SGD(learning_rate=learning_rate)
 
+    _tic = time.perf_counter()
     for e in range(num_epochs):
         tic = time.perf_counter()
         key, key0 = mx.random.split(key)
@@ -77,6 +76,8 @@ def main():
         accuracy = eval_fn(model, test_images, test_labels)
         toc = time.perf_counter()
         print(f"Epoch {e}: Test accuracy {accuracy.item():.3f}," f" Time {toc - tic:.3f} (s)")
+    _toc = time.perf_counter()
+    print(f"{_toc-_tic:.5f} (s)")
 
 
 if __name__ == "__main__":

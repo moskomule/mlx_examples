@@ -1,6 +1,6 @@
-
-
 # mlx-examples
+
+This repository contains some examples of [mlx](), a JAX+PyTorch like framework recently released from Apple.
 
 **This project is work in progress**
 
