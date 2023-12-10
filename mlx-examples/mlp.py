@@ -72,7 +72,8 @@ def main():
             loss, grads = loss_and_grad_fn(model, X, y)
             optimizer.update(model, grads)
             # I don't know this eval is necessary...?
-            # mx.eval(model.parameters(), optimizer.state)
+            # it is necessary to avoid graph explosion
+            mx.eval(model.parameters(), optimizer.state)
         accuracy = eval_fn(model, test_images, test_labels)
         toc = time.perf_counter()
         print(f"Epoch {e}: Test accuracy {accuracy.item():.3f}," f" Time {toc - tic:.3f} (s)")
